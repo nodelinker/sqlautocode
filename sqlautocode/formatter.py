@@ -1,6 +1,6 @@
 import sqlalchemy
 
-from . import config, constants, util
+import config, constants, util
 
 
 def textclause_repr(self):

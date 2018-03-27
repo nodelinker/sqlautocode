@@ -150,12 +150,16 @@ def _setup_engine(parser, url):
 
 def _instrument():
     # monkeypatch SQLAlchemy __repr__ methods
-    from . import formatter  # noqa
-    from . import loader  # noqa
+    # from . import formatter  # noqa
+    # from . import loader  # noqa
+
+    import formatter  # noqa
+    import loader  # noqa
 
 
-def _set_output(path, overwrite=False):
-    if os.path.exists(path) and not overwrite:
+def _set_output(path, overwrite=True):
+
+    if os.path.exists(path) and overwrite is False:
         print >>err, 'File "%s" exists and will be overwritten.' % path
         resp = raw_input('Overwrite (y/[n]): ')
         if not resp.strip().lower().startswith('y'):

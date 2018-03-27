@@ -1,16 +1,13 @@
 import sys
 
-from . import config
-from . import constants
-from . import util
-from .declarative import ModelFactory
-from .util import emit
+import config
+import constants
+import util
+from declarative import ModelFactory
+from util import emit
 
 
 def main():
-    from os import sys, path
-    sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
-
     config.configure()
 
     options = config.options
@@ -79,7 +76,10 @@ def main():
     header = options.z3c and constants.HEADER_Z3C or constants.HEADER
     emit(header % {'dialect': dialect, 'encoding': options.encoding})
 
+    _table_array = []
     for tname in tablenames:
+
+        _table_array.append(tname)
         print >>config.err, "Generating python model for table %s" % (
             util.as_sys_str(tname))
 
@@ -123,8 +123,10 @@ def main():
                     )
             else:
                 indexes = list(table.indexes)
-
             util.emit(*[repr(index) for index in indexes])
+
+    if len(_table_array) > 0:
+        emit("table_array = %s" % repr(_table_array))
 
     if options.z3c:
         emit(constants.FOOTER_Z3C)
@@ -141,3 +143,9 @@ def main():
         print >> config.err, "Output written to %s" % options.output
 
 # vim:ts=4:sw=4:expandtab
+
+if __name__ == "__main__":
+    from os import path
+    sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
+
+    main()
