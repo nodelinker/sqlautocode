@@ -8,6 +8,9 @@ from .util import emit
 
 
 def main():
+    from os import sys, path
+    sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
+
     config.configure()
 
     options = config.options

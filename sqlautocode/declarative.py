@@ -184,6 +184,8 @@ class ModelFactory(object):
             s.write(constants.EXAMPLE_DECL % (models[0].__name__, models[0].__name__))
         if self.config.interactive:
             s.write(constants.INTERACTIVE % ([model.__name__ for model in models], models[0].__name__))
+        s.write("arr_models = %s\n\n", repr(self.used_model_names))
+        s.write("arr_tables = %s\n\n", repr(self.used_table_names))
         return s.getvalue()
 
     @property
