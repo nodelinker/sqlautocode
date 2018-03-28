@@ -104,6 +104,16 @@ def main():
                                 tname,
                                 options.table_suffix, table))
 
+        if True:
+            new_table = sqlalchemy.Table(tname+"_clone", metadata)
+            for col in table.columns:
+                new_table.append_column(col.copy())
+
+            emit('%s%s%s%s = %r' % (inc,
+                                    options.table_prefix,
+                                    tname + "_clone",
+                                    options.table_suffix, new_table))
+
         if options.z3c:
             emit(inc + ('class %(tn)sObject(MappedClassBase): pass\n'
                         'mapper(%(tn)sObject, %(tn)s)') % {'tn': tname})
