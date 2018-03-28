@@ -88,9 +88,22 @@ def column_repr(self):
 
 
 def foreignkeyconstraint_repr(self):
+    specs = []
+    for x in self.elements:
+        """Return a string based 'column specification' for this
+        :class:`.ForeignKey`.
+
+        This is usually the equivalent of the string-based "tablename.colname"
+        argument first passed to the object's constructor.
+
+        """
+        _, tname, colname = x._column_tokens
+        specs.append("%s.%s" % (tname, colname))
+
     data = {'name': repr(self.name),
             'names': repr([x.parent.name for x in self.elements]),
-            'specs': repr([x._get_colspec() for x in self.elements])
+            # 'specs': repr([x._get_colspec() for x in self.elements])
+            'specs': repr(specs)
             }
     return util.as_out_str(constants.FOREIGN_KEY % data)
 
