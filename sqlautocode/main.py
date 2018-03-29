@@ -78,13 +78,14 @@ def main():
     emit(header % {'dialect': "", 'encoding': options.encoding})
     _table_array = []
     for tname in tablenames:
-
         _table_array.append(tname)
+
         print >>config.err, "Generating python model for table %s" % (
             util.as_sys_str(tname))
 
         table = sqlalchemy.Table(tname, metadata, schema=reflection_schema,
                                  autoload=True)
+
         if options.schema is None:
             # we're going to remove the schema from the table so that it
             #  isn't rendered in the output.  If we don't put back the
@@ -105,13 +106,14 @@ def main():
                                 options.table_suffix, table))
 
         if True:
-            new_table = sqlalchemy.Table(tname+"_clone", metadata)
+            clone_name = tname + "_clone"
+            new_table = sqlalchemy.Table(clone_name, metadata)
             for col in table.columns:
                 new_table.append_column(col.copy())
 
             emit('%s%s%s%s = %r' % (inc,
                                     options.table_prefix,
-                                    tname + "_clone",
+                                    clone_name,
                                     options.table_suffix, new_table))
 
         if options.z3c:
@@ -136,7 +138,7 @@ def main():
             util.emit(*[repr(index) for index in indexes])
 
     if len(_table_array) > 0:
-        emit("table_array = %s" % repr(_table_array))
+        emit("table_array = %s" % str(repr(_table_array)).replace("u'", "").replace("u\"", "").replace("'", "") )
 
     if options.z3c:
         emit(constants.FOOTER_Z3C)
